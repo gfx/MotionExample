@@ -7,7 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -17,14 +17,20 @@ public class MainActivity extends Activity implements SensorEventListener {
     private float accelCurrent; // current acceleration including gravity
     private float accelLast; // last acceleration including gravity
 
+    private TextView textView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         sensorMgr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensorMgr.registerListener(this, sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         accel = 0.00f;
         accelCurrent = SensorManager.GRAVITY_EARTH;
-        accelLast = SensorManager.GRAVITY_EARTH;
+        accelLast    = SensorManager.GRAVITY_EARTH;
+
+        textView = (TextView)findViewById(R.id.text);
+        textView.setText("");
     }
     @Override
     protected void onResume() {
@@ -49,7 +55,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         accel = accel * 0.9f + delta; // perform low-cut filter
 
         if (Math.abs(accel) > 5.0) {
-            Log.d("XXX", "accel:" + accel);
+            textView.append("accel: " + accel + "\n");
         }
     }
 
